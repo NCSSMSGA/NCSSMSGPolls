@@ -1,0 +1,33 @@
+.page-header
+  = link_to new_election_path, :class => 'btn btn-default' do
+    %span.glyphicon.glyphicon-plus
+    New Election
+  %h1 Listing elections
+.table-responsive
+  %table.table.table-striped.table-bordered.table-hover
+    %thead
+      %tr
+        %th Name
+        %th Numcand
+        %th Start
+        %th End
+        %th Active
+        %th Ranked
+        %th
+        %th
+    %tbody
+      = content_tag_for(:tr, @elections) do |election|
+        %td
+          -if election.active?
+            %span.label.label-warning Active
+          -if election.open?
+            %span.label.label-success Open
+          = election.name
+        %td= election.numcand
+        %td= election.start.strftime('%A, %B %e, %Y at %l:%M %P')
+        %td= election.end.strftime('%A, %B %e, %Y at %l:%M %P')
+        %td= election.active
+        %td= election.ranked
+        %td= link_to 'Show', election
+        %td= link_to 'Edit', edit_election_path(election)
+        %td= link_to 'Destroy', election, method: :delete, data: { confirm: 'Are you sure?' }

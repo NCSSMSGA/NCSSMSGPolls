@@ -1,0 +1,23 @@
+.page-header
+  = link_to elections_path, :class => 'btn btn-default' do
+    %span.glyphicon.glyphicon-list-alt
+    Back
+  = link_to edit_election_path(@election), :class => 'btn btn-primary' do
+    %span.glyphicon.glyphicon-pencil
+    Edit
+  %h1 Show election
+%dl.dl-horizontal
+  %dt Name:
+  %dd= @election.name
+  %dt Selectable Candidates:
+  %dd= @election.numcand
+  %dt Allowed Classes:
+  %dd= @election.years
+  %dt Start:
+  %dd= @election.start
+  %dt End:
+  %dd= @election.end
+  %dt Active:
+  %dd= @election.active
+  %dt Ranked:
+  %dd= @election.ranked

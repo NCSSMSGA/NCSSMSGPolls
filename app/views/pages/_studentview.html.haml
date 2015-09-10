@@ -1,0 +1,83 @@
+.row
+  .col-md-4.col-md-offset-4
+    %em Instructions:
+    %p Please select the election you wish to vote in using the tabs below. Then, use the select boxes to choose your desired candidates. You may opt to leave a slot blank by leaving the select box on "No Selection". Finally, click "Vote".
+    %br
+    %em Please note:
+    %p Each "vote" button only submits the ballot in its respective tab. Check all tabs to ensure you have voted in all available elections.
+
+.row
+  .col-md-4.col-md-offset-4.text-center
+    - if @elections
+      %div{role: 'tabpanel'}
+        %ul.nav.nav-tabs{role: 'tablist'}
+          - @elections.each do |e|
+            %li{role: 'presentation', class: "#{e == @elections.first ? 'active' : ''}"}
+              %a{href: "#e#{e.id}", "aria-controls" => "e#{e.id}", role: 'tab', data: {toggle: 'tab'}}
+                = e.name
+        .tab-content
+          - @elections.each do |e|
+            .tab-pane{role: 'tabpanel', id: "e#{e.id}", class: "#{e == @elections.first ? 'active' : ''}"}
+              .panel.panel-default
+                .panel-body
+                  .row
+                    .col-md-10.col-md-offset-1
+                      %h1=e.name
+                      %h3 Candidates
+                      %dl
+                        - e.candidates.each do |c|
+                          %dt= c.name
+                      - if Time.now < e.start
+                        .alert.alert-info= "This election will open at #{e.start.strftime("%l:%M %p on %A, %B %e, %Y")}"
+                      - elsif Time.now > e.end
+                        .alert.alert-info This election is closed.
+                      - elsif current_user.ballots.pluck(:election_id).include? e.id
+                        .alert.alert-info= "You have already voted in the #{e.name}"
+                      - elsif !e.years.include? current_user.year
+                        .alert.alert-info= "Only members of the class of #{e.years.map{|x| 2000+x}.to_sentence} may vote in this election."
+                      - else
+                        = form_for @ballots[e.id], :html => { :class => "form-horizontal", :role => "form" } do |f|
+                          -if @ballots[e.id].errors.any?
+                            .alert.alert-danger.alert-dismissable{:role => "alert"}
+                              %button.close{:type => "button", :data => {:dismiss => "alert"} }
+                                span{:aria => {:hidden => "true"} } &times;
+                                span.sr-only Close
+                              %h4= "#{pluralize(@ballot.errors.count, "error")} prohibited this ballot from being saved:"
+
+                              %ul
+                                - @ballots[e.id].errors.full_messages.each do |msg|
+                                  %li= msg
+                          = f.hidden_field :election_id, value: e.id
+                          %div{id: "select#{e.id}"}
+                            = f.fields_for :votes do |v|
+                              = v.hidden_field :rank, value: v.options[:child_index] + 1
+                              .input-group
+                                -if e.ranked
+                                  %span.input-group-addon= "Rank #{v.options[:child_index] + 1}"
+                                  = v.collection_select(:candidate_id, e.candidates, :id, :name, {}, {class: 'form-control'})
+                                -else
+                                  = v.collection_select(:candidate_id, e.candidates, :id, :name, {prompt: 'No Selection'}, {class: 'form-control'})
+                          %br
+                          %button.btn.btn-info{type: 'button', onclick: "loadChoices(#{e.id})", data: {toggle: 'modal', target: "#modal#{e.id}"}} Confirm Vote
+
+                          .modal.fade{id: "modal#{e.id}"}
+                            .modal-dialog
+                              .modal-content
+                                .modal-header
+                                  %button.close{type: 'button', "aria-label" => "Close", data: {dismiss: 'modal'}}
+                                    %span{"aria-hidden" => "true"} &times;
+                                  %h4 Confirm Vote
+                                .modal-body
+                                  .form-group
+                                    %p= "In the #{e.name}, you are voting for:"
+                                    - if e.ranked
+                                      %ol.cand-list
+                                    - else
+                                      %ul.cand-list
+                                    %em I certify that this information is correct
+                                    %input{type:'checkbox', required: 'required'}
+                                .modal-footer
+                                  %button.btn.btn-default{type: 'button', data: {dismiss: 'modal'}} Close
+                                  = f.submit 'Submit Vote', :class => 'btn btn-success'
+    - else
+      .alert.alert-info No elections have been created.

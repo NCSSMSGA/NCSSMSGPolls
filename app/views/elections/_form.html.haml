@@ -1,0 +1,44 @@
+= form_for(@election, :html => { :class => "form-horizontal", :role => "form" }) do |f|
+  - if @election.errors.any?
+    .alert.alert-danger.alert-dismissable{:role => "alert"}
+      %button.close{"data-dismiss" => "alert", :type => "button"}
+        %span{"aria-hidden" => "true"} ×
+        %span.sr-only Close
+      %h4
+        = pluralize(@election.errors.count, "error")
+        prohibited this election from being saved:
+      %ul
+        - @election.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group
+    = f.label :name, :class => "col-sm-2 control-label"
+    .col-sm-8
+      = f.text_field :name, :class => "form-control"
+  .form-group
+    = f.label :numcand, "Selectable Candidates", :class => "col-sm-2 control-label"
+    .col-sm-8
+      = f.number_field :numcand, :class => "form-control"
+  .form-group
+    = f.label :years, :class => "col-sm-2 control-label"
+    %small You are required to re-set the allowed years every time you update an election.
+    .col-sm-8
+      = f.select :years, options_for_select([['2015','15'],['2016','16']]), {},{multiple:true,id:'yearSelect',required:true}
+  .form-group
+    = f.label :start, :class => "col-sm-2 control-label"
+    .col-sm-8
+      = f.datetime_select :start, :class => "form-control"
+  .form-group
+    = f.label :end, :class => "col-sm-2 control-label"
+    .col-sm-8
+      = f.datetime_select :end, :class => "form-control"
+  .form-group
+    = f.label :active, :class => "col-sm-2 control-label"
+    .col-sm-8
+      = f.check_box :active, :class => "form-control"
+  .form-group
+    = f.label :ranked, :class => "col-sm-2 control-label"
+    .col-sm-8
+      = f.check_box :ranked, :class => "form-control"
+  .form-group
+    .col-sm-offset-2.col-sm-8
+      = f.submit :class => "btn btn-default"

@@ -1,0 +1,62 @@
+/*
+Styles for the homepage before the user has logged into the system.
+*/
+
+html, body {
+    height: 100%;
+}
+
+#signIn {
+    position: relative;
+    top: 47%;
+    -o-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+#signIn a:hover {
+    background-color: #2e6da4;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100%;
+    padding-top: 0px !important;
+    background-image: url('WattsHospitalHome.jpg');
+}
+
+#electionHead {
+    text-align: center;
+    color: rgba(270,270,270,.9)
+}
+#title_box {
+    opacity: 0.851;
+    border: 8px solid #2e6da4;
+    border-radius: 39px;
+    background-color: rgb(255, 255, 255);
+    padding-bottom: 4em;
+    padding-top: 1em;
+    width: 30em;
+
+}
+#loginButton {
+    border-color: #2e6da4;
+    color: rgba(270,270,270,.9);
+    background-color: rgba(51, 122, 183,.8);
+}
+#electionHead {
+    text-align: center;
+    color: #404040;
+}
+
+@media screen and (max-width: 992px)  {
+    #title_box {
+        margin: 0 auto;
+    }
+}

@@ -1,0 +1,13 @@
+.page-header
+  = link_to candidates_path, :class => 'btn btn-default' do
+    %span.glyphicon.glyphicon-list-alt
+    Back
+  = link_to edit_candidate_path(@candidate), :class => 'btn btn-default' do
+    %span.glyphicon.glyphicon-pencil
+    Edit
+  %h1 Show candidate
+%dl.dl-horizontal
+  %dt Name:
+  %dd= @candidate.name
+  %dt Election:
+  %dd= @candidate.election.name

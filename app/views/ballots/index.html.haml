@@ -1,0 +1,21 @@
+.page-header
+  = link_to new_ballot_path, :class => 'btn btn-primary' do
+    %span.glyphicon.glyphicon-plus
+    New Ballot
+  %h1 Listing ballots
+.table-responsive
+  %table.table.table-striped.table-bordered.table-hover
+    %thead
+      %tr
+        %th User
+        %th Election
+        %th
+        %th
+        %th
+    %tbody
+      = content_tag_for(:tr, @ballots) do |ballot|
+        %td= ballot.user.email
+        %td= ballot.election.name
+        %td= link_to 'Show', ballot
+        %td= link_to 'Edit', edit_ballot_path(ballot)
+        %td= link_to 'Destroy', ballot, method: :delete, data: { confirm: 'Are you sure?' }

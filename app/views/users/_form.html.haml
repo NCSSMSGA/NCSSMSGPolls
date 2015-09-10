@@ -1,0 +1,20 @@
+= form_for(@user, url: "/users/#{@user.id}/edit", html: { :class => "form-horizontal", :role => "form" , method: :put}) do |f|
+  - if @user.errors.any?
+    .alert.alert-danger.alert-dismissable{:role => "alert"}
+      %button.close{"data-dismiss" => "alert", :type => "button"}
+        %span{"aria-hidden" => "true"} ×
+        %span.sr-only Close
+      %h4
+        = pluralize(@user.errors.count, "error")
+        prohibited this election from being saved:
+      %ul
+        - @user.errors.full_messages.each do |msg|
+          %li= msg
+
+  .form-group
+    = f.label :admin, :class => "col-sm-2 control-label"
+    .col-sm-8
+      = f.check_box :admin, :class => "form-control"
+  .form-group
+    .col-sm-offset-2.col-sm-8
+      = f.submit :class => "btn btn-default"

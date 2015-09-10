@@ -1,0 +1,23 @@
+- if user_signed_in?
+  - if !current_user.admin?
+    .row
+      .col-md-4.col-md-offset-4.text-center
+        %h3
+          = @election.name if @election
+      .col-md-4
+        %a.btn.btn-primary.pull-right.margin{href: "#{destroy_user_session_url}", data: {method: 'delete'}}
+          Log Out
+  - if current_user.admin?
+    = render "dashboard"
+  - else
+    = render "studentview"
+  %br
+- else
+  .row#signIn
+    .col-md-4.col-md-offset-4.text-center#title_box
+      %h1#electionHead
+        NCSSM Elections
+      %a#loginButton.btn.btn-primary{href: "#{user_omniauth_authorize_url(:google_oauth2)}"}
+        Login with Google
+      %html
+        = stylesheet_link_tag    'home', media: 'all', 'data-turbolinks-track' => true

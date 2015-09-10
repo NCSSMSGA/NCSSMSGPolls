@@ -1,0 +1,23 @@
+= form_for(@candidate, :html => { :class => "form-horizontal", :role => "form" }) do |f|
+  - if @candidate.errors.any?
+    .alert.alert-danger.alert-dismissable{:role => "alert"}
+      %button.close{"data-dismiss" => "alert", :type => "button"}
+        %span{"aria-hidden" => "true"} ×
+        %span.sr-only Close
+      %h4
+        = pluralize(@candidate.errors.count, "error")
+        prohibited this candidate from being saved:
+      %ul
+        - @candidate.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group
+    = f.label :name, :class => "col-sm-2 control-label"
+    .col-sm-10
+      = f.text_field :name, :class => "form-control"
+  .form-group
+    = f.label :election, :class => "col-sm-2 control-label"
+    .col-sm-10
+      = f.collection_select(:election_id, Election.all, :id, :name)
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = f.submit :class => "btn btn-default"

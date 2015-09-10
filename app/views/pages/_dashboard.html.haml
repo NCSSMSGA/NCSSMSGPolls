@@ -1,0 +1,62 @@
+%br
+- if @elections
+  - @elections.each do |e|
+    .row
+      .col-md-8.col-md-offset-2
+        .panel.panel-primary
+          .panel-heading
+            %h3.panel-title.pull-right
+              = link_to 'Edit Election', edit_election_path(e)
+            %h3.panel-title
+              =e.name
+          .panel-body
+            .row
+              .col-md-4.text-center
+                %h1
+                  = e.votes.count
+                  Votes
+                %h5
+                  = e.ballots.count
+                  People Voting
+              .col-md-4.text-center
+                %h1 Candidate Scores
+                - if e.votes.any?
+                  %dl.dl-horizontal
+                    - e.candidates.each do |candidate|
+                      %dt
+                        = candidate.name
+                      %dd= "#{candidate.votes.count} | #{((candidate.votes.count.to_f/e.votes.count.to_f)*100).round(3)}%"
+                - else
+                  No votes have been placed yet.
+              .col-md-4.text-center
+                %h1
+                  - if(Time.now > e.start and Time.now < e.end)
+                    = "#{((e.end - Time.now)/60).round(0)} minutes remaining"
+                  - elsif(Time.now > e.end)
+                    = "Election has ended"
+                  - else
+                    = "#{((e.start-Time.now)/60).round(0)} minutes until election start"
+          .row
+            .col-md-4.col-md-offset-4.text-center
+              %button.btn.btn-info{onclick: "toggleDiv(table#{e.id})"} Show Votes
+              %a.btn.btn-success{href: "/results/#{e.id}.xls"} Download Excel
+          .row
+            %br
+          .row.hiding{id: "table#{e.id}"}
+            .col-md-12
+              %br
+              %table.table.table-striped
+                %tr
+                  %th ID
+                  %th User ID
+                  %th Ballot ID
+                  %th Candidate
+                - e.votes.each do |v|
+                  %tr
+                    %td=v.id
+                    %td=v.ballot.user_id
+                    %td=v.ballot_id
+                    %td=v.candidate_id
+
+- else
+  .alert.alert-info No Elections have been created!

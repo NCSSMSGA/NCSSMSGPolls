@@ -1,0 +1,22 @@
+.page-header
+  = link_to new_candidate_path, :class => 'btn btn-default' do
+    %span.glyphicon.glyphicon-plus
+    New Candidate
+  %h1 Listing candidates
+
+.table-responsive
+  %table.table.table-striped.table-bordered.table-hover
+    %thead
+      %tr
+        %th Name
+        %th Election
+        %th
+        %th
+        %th
+    %tbody
+      = content_tag_for(:tr, @candidates) do |candidate|
+        %td= candidate.name
+        %td= candidate.election.name
+        %td= link_to 'Show', candidate
+        %td= link_to 'Edit', edit_candidate_path(candidate)
+        %td= link_to 'Destroy', candidate, method: :delete, data: { confirm: 'Are you sure?' }

@@ -1,0 +1,20 @@
+%br
+.row
+  .col-md-4.col-md-offset-4
+    .panel.panel-primary
+      .panel-heading
+        %h3= "Ballot ##{@ballot.id}"
+      .panel-body
+        %dl.dl-horizontal
+          %dt Election:
+          %dd= @ballot.election.name
+          %dt Votes:
+          - @ballot.votes.each do |vote|
+            %dd= "#{vote.rank} | #{vote.candidate ? vote.candidate.name : 'No Selection' }" 
+          
+.row
+  .col-md-4.col-md-offset-4.text-right
+    %a.btn.btn-info.btn-lg{href: "#{root_url}"}
+      Back to Elections
+    %a.btn.btn-danger.btn-lg{href: "#{destroy_user_session_path}", data: {method: 'delete'}}
+      Log Out
